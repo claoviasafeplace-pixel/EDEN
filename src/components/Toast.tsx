@@ -53,7 +53,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={toast.id}
             className={`
-              bg-white border border-vm-border rounded-2xl px-5 py-4 text-sm text-vm-text font-medium
+              bg-white border border-slate-100 rounded-2xl px-5 py-4 text-sm text-vm-text font-medium
               shadow-[0_8px_32px_rgba(0,0,0,0.08)] max-w-sm flex items-center gap-3
               ${toast.fading ? 'animate-fade-out' : 'animate-slide-in'}
             `}
