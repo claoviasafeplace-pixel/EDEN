@@ -68,59 +68,59 @@ function AppContent() {
       {/* Main */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-20 bg-white/70 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-10 shrink-0 z-10">
-          <div className="relative w-full max-w-md hidden md:block">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+        <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-8 shrink-0 z-10">
+          <div className="relative w-full max-w-sm hidden md:block">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 w-4 h-4" />
             <input
               type="text"
-              placeholder="Rechercher un mandat ou un reel..."
-              className="w-full pl-12 pr-4 py-3 bg-slate-100/50 border-transparent border-2 focus:bg-white focus:border-vm-primary/30 rounded-2xl text-sm outline-none transition-all placeholder:text-slate-400"
+              placeholder="Rechercher un mandat..."
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 focus:bg-white focus:border-vm-primary/30 rounded-xl text-sm outline-none transition-all placeholder:text-slate-300"
             />
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right">
-              <span className="text-sm font-bold block">Eden ERA</span>
-              <span className="text-[11px] text-vm-primary font-medium uppercase tracking-wider">Directrice Marketing</span>
+              <span className="text-sm font-semibold block text-vm-text">Eden ERA</span>
+              <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Marketing</span>
             </div>
-            <div className="w-12 h-12 rounded-2xl border-2 border-white shadow-xl overflow-hidden ring-4 ring-slate-50 cursor-pointer hover:scale-105 transition-transform bg-vm-primary-light flex items-center justify-center">
-              <span className="text-vm-primary font-black text-lg">E</span>
+            <div className="w-9 h-9 rounded-lg bg-vm-primary flex items-center justify-center">
+              <span className="text-white font-bold text-sm">E</span>
             </div>
           </div>
         </header>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8 lg:p-10 space-y-12">
+        <div className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-8">
 
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
             <>
               {/* Title bar */}
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-end">
                 <div>
-                  <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-vm-text">Dashboard</h1>
-                  <p className="text-slate-500 mt-2 font-medium">Vos mandats transformes en contenus viraux par l&apos;IA.</p>
+                  <h1 className="text-2xl font-bold text-vm-text">Dashboard</h1>
+                  <p className="text-slate-400 mt-1 text-sm">Vos mandats transformes en contenus viraux.</p>
                 </div>
                 <div className="hidden md:flex gap-2">
-                  <div className="bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm text-xs font-bold text-slate-400 flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5" />
-                    Derniere activite : {reels.length > 0 ? 'Recemment' : 'Aucune'}
+                  <div className="bg-slate-50 px-3 py-1.5 rounded-lg text-[11px] font-medium text-slate-400 flex items-center gap-1.5">
+                    <Clock className="w-3 h-3" />
+                    {reels.length > 0 ? 'Activite recente' : 'Aucune activite'}
                   </div>
                 </div>
               </div>
 
               {/* Stats Bento */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {stats.map((stat, i) => (
-                  <div key={i} className="bg-white p-7 lg:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm
-                                          hover:shadow-[0_16px_48px_rgba(193,134,107,0.06)] transition-all duration-500 group">
-                    <div className={`${stat.bg} ${stat.color} w-14 h-14 rounded-2xl flex items-center justify-center mb-5
-                                     group-hover:scale-110 transition-transform duration-500`}>
-                      <stat.icon className="w-7 h-7" />
+                  <div key={i} className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm
+                                          hover:shadow-md transition-all duration-300 group">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`${stat.bg} ${stat.color} w-11 h-11 rounded-xl flex items-center justify-center
+                                       group-hover:scale-105 transition-transform duration-300`}>
+                        <stat.icon className="w-5 h-5" />
+                      </div>
                     </div>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.15em]">{stat.label}</p>
-                    <div className="flex items-baseline gap-2 mt-1">
-                      <p className="text-4xl font-black text-vm-text">{stat.value}</p>
-                    </div>
+                    <p className="text-slate-400 text-[11px] font-bold uppercase tracking-[0.15em]">{stat.label}</p>
+                    <p className="text-3xl font-black text-vm-text mt-1">{stat.value}</p>
                   </div>
                 ))}
               </div>
@@ -131,49 +131,44 @@ function AppContent() {
                   <div className="w-12 h-12 border-[3px] border-slate-200 border-t-vm-primary rounded-full animate-spin-slow" />
                 </div>
               ) : reels.length === 0 ? (
-                <div className="relative group">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-vm-primary/20 to-orange-200/20 rounded-[3.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
-                  <div className="relative bg-white border border-slate-100 rounded-[3.5rem] p-16 lg:p-20 flex flex-col items-center justify-center text-center space-y-10 min-h-[500px]">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-vm-primary blur-3xl opacity-10 animate-glow-bg" />
-                      <div className="bg-vm-primary-light w-32 h-32 rounded-[2.5rem] flex items-center justify-center relative border border-vm-primary/10">
-                        <Video className="w-14 h-14 text-vm-primary" />
-                        <div className="absolute -top-2 -right-2 bg-vm-primary p-2 rounded-full text-white shadow-lg">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
+                <div className="bg-white border border-slate-200/60 rounded-3xl p-12 lg:p-16 flex flex-col items-center justify-center text-center space-y-8 min-h-[420px]">
+                  <div className="relative">
+                    <div className="bg-vm-primary-light w-24 h-24 rounded-2xl flex items-center justify-center relative">
+                      <Video className="w-10 h-10 text-vm-primary" />
+                      <div className="absolute -top-1.5 -right-1.5 bg-vm-primary p-1.5 rounded-full text-white shadow-md">
+                        <Sparkles className="w-3 h-3" />
                       </div>
                     </div>
-                    <div className="max-w-md space-y-4">
-                      <h3 className="text-3xl font-black text-vm-text tracking-tight">Prete a buzzer ?</h3>
-                      <p className="text-slate-400 leading-relaxed text-lg font-medium">
-                        Deposez les photos de votre nouveau mandat. Notre IA s&apos;occupe du meuble virtuel et du montage rythme.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setShowCreate(true)}
-                      className="group/btn bg-vm-text text-white px-12 py-6 rounded-[2rem] font-bold text-xl
-                                 flex items-center gap-4 hover:bg-vm-primary transition-all hover:scale-105
-                                 shadow-[0_16px_48px_rgba(26,26,26,0.2)] active:scale-100"
-                    >
-                      Demarrer la creation
-                      <ArrowRight className="w-6 h-6 group-hover/btn:translate-x-2 transition-transform" />
-                    </button>
                   </div>
+                  <div className="max-w-sm space-y-3">
+                    <h3 className="text-2xl font-black text-vm-text tracking-tight">Prete a buzzer ?</h3>
+                    <p className="text-slate-400 leading-relaxed font-medium">
+                      Deposez les photos de votre nouveau mandat. Notre IA s&apos;occupe du meuble virtuel et du montage rythme.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowCreate(true)}
+                    className="bg-vm-text text-white px-8 py-4 rounded-xl font-bold text-base
+                               flex items-center gap-3 hover:bg-vm-primary transition-all
+                               shadow-lg active:scale-[0.98]"
+                  >
+                    Demarrer la creation
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
                 </div>
               ) : (
                 <>
                   <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-black text-vm-text tracking-tight">Mes Reels</h2>
+                    <h2 className="text-lg font-bold text-vm-text">Mes Reels</h2>
                     <button
                       onClick={() => setShowCreate(true)}
-                      className="bg-vm-primary hover:bg-vm-primary-dark text-white px-6 py-3 rounded-2xl font-bold text-sm
-                                 shadow-[0_4px_16px_rgba(193,134,107,0.25)] transition-all hover:-translate-y-0.5
-                                 active:scale-95 flex items-center gap-2"
+                      className="bg-vm-primary hover:bg-vm-primary-dark text-white px-5 py-2.5 rounded-xl font-bold text-sm
+                                 shadow-sm transition-all active:scale-95 flex items-center gap-2"
                     >
                       <Plus className="w-4 h-4" /> Nouveau Reel
                     </button>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                     {reels.map(reel => (
                       <ReelCard key={reel.id} reel={reel} onClick={() => setSelectedReel(reel)} />
                     ))}
@@ -191,13 +186,13 @@ function AppContent() {
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div>
-                <h1 className="text-4xl font-black tracking-tight text-vm-text">Parametres</h1>
-                <p className="text-slate-500 mt-2 font-medium">Configurez votre compte et vos preferences.</p>
+                <h1 className="text-2xl font-bold text-vm-text">Parametres</h1>
+                <p className="text-slate-400 mt-1 text-sm">Configurez votre compte et vos preferences.</p>
               </div>
-              <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm">
-                <h3 className="font-black text-lg text-vm-text mb-6">Compte</h3>
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-6 shadow-sm">
+                <h3 className="font-bold text-vm-text mb-5">Compte</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between py-4 border-b border-slate-50">
                     <div>

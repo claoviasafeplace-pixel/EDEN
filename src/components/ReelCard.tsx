@@ -34,9 +34,9 @@ export default function ReelCard({ reel, onClick }: ReelCardProps) {
   return (
     <div
       onClick={onClick}
-      className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden cursor-pointer
-                 shadow-sm hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)]
-                 hover:-translate-y-1 transition-all duration-500 group"
+      className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden cursor-pointer
+                 shadow-sm hover:shadow-md
+                 hover:-translate-y-0.5 transition-all duration-300 group"
     >
       {reel.image_facade_url ? (
         <div className="aspect-[16/10] overflow-hidden relative">
@@ -70,14 +70,14 @@ export default function ReelCard({ reel, onClick }: ReelCardProps) {
         </div>
       )}
 
-      <div className="p-6">
-        <h3 className="font-heading font-bold text-base text-vm-text leading-tight">
+      <div className="p-5">
+        <h3 className="font-semibold text-sm text-vm-text leading-tight">
           {reel.ville} — {reel.quartier}
         </h3>
-        <p className="text-vm-primary font-black text-xl mt-1">
+        <p className="text-vm-primary font-bold text-lg mt-1">
           {reel.prix} €
         </p>
-        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-50">
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-50">
           <span className="text-slate-400 text-xs font-medium">
             {timeAgo(reel.created_at)}
           </span>
