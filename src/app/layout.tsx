@@ -10,12 +10,12 @@ const inter = Inter({
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "VIMMO - Reels Immobiliers",
-  description: "Creez des Reels immobiliers professionnels en quelques clics",
+  title: "VIMMO — Reels Immobiliers",
+  description: "Generez des Reels immobiliers professionnels en quelques clics",
 };
 
 export default function RootLayout({
