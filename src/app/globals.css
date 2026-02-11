@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-eden-bg: #0A0A0F;
+  --color-eden-surface: #141419;
+  --color-eden-border: #1E1E26;
+  --color-eden-gold: #C8A951;
+  --color-eden-gold-hover: #D4B86A;
+  --color-eden-text: #FFFFFF;
+  --color-eden-muted: #8B8B9E;
+  --color-eden-input: #1A1A22;
+  --color-eden-input-border: #2A2A35;
+  --color-eden-success: #4CAF50;
+  --color-eden-error: #E53935;
+  --color-eden-info: #2196F3;
+  --color-eden-dim: #555555;
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-montserrat);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0A0A0F;
+  color: #FFFFFF;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Animations */
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 169, 81, 0.4); }
+  50% { box-shadow: 0 0 20px 4px rgba(200, 169, 81, 0.2); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-pulse-badge {
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s ease-out forwards;
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 1.5s linear infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A35;
+  border-radius: 3px;
+}
