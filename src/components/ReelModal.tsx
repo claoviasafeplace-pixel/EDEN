@@ -17,7 +17,7 @@ export default function ReelModal({ reel, onClose, onDeleted, onUpdated }: ReelM
   const handleCopyLink = async () => {
     if (reel.video_916_url) {
       await navigator.clipboard.writeText(reel.video_916_url);
-      showToast('Lien copie !', 'info');
+      showToast('Lien copie dans le presse-papier', 'info');
     }
   };
 
@@ -59,18 +59,25 @@ export default function ReelModal({ reel, onClose, onDeleted, onUpdated }: ReelM
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
-        className="bg-eden-surface rounded-2xl max-w-[700px] w-full max-h-[90vh] overflow-y-auto p-8 animate-fade-in"
+        className="bg-white rounded-3xl max-w-[700px] w-full max-h-[90vh] overflow-y-auto p-8 animate-fade-in
+                    shadow-[0_24px_64px_rgba(28,43,58,0.18)]"
         onClick={e => e.stopPropagation()}
       >
-        {/* Close button */}
-        <div className="flex justify-end -mt-2 -mr-2 mb-4">
-          <button onClick={onClose} className="text-eden-muted hover:text-white transition p-1">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="font-heading font-bold text-xl text-vm-text">
+              {reel.ville} — {reel.quartier}
+            </h2>
+            <p className="text-vm-accent font-bold text-lg">{reel.prix} €</p>
+          </div>
+          <button onClick={onClose} className="text-vm-dim hover:text-vm-text transition p-2 rounded-xl hover:bg-vm-input">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
@@ -81,22 +88,22 @@ export default function ReelModal({ reel, onClose, onDeleted, onUpdated }: ReelM
             <video
               controls
               src={reel.video_916_url}
-              className="w-full rounded-xl bg-black"
+              className="w-full rounded-2xl bg-vm-text"
               style={{ maxHeight: '400px' }}
             />
-            <div className="flex flex-wrap gap-3 mt-4">
+            <div className="grid grid-cols-3 gap-3 mt-4">
               <a
                 href={reel.video_916_url}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-eden-gold text-eden-bg font-semibold py-3 px-4 rounded-xl text-center text-sm
-                           hover:bg-eden-gold-hover transition-all flex items-center justify-center gap-2"
+                className="bg-vm-accent text-white font-semibold py-3 px-4 rounded-xl text-center text-sm
+                           hover:bg-vm-accent-hover transition-all flex items-center justify-center gap-2 shadow-sm"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Reel 9:16
+                9:16
               </a>
               {reel.video_1x1_url && (
                 <a
@@ -104,56 +111,56 @@ export default function ReelModal({ reel, onClose, onDeleted, onUpdated }: ReelM
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 bg-eden-gold text-eden-bg font-semibold py-3 px-4 rounded-xl text-center text-sm
-                             hover:bg-eden-gold-hover transition-all flex items-center justify-center gap-2"
+                  className="bg-vm-primary text-white font-semibold py-3 px-4 rounded-xl text-center text-sm
+                             hover:bg-vm-primary-hover transition-all flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  Carre 1:1
+                  1:1
                 </a>
               )}
               <button
                 onClick={handleCopyLink}
-                className="flex-1 border border-eden-gold text-eden-gold font-semibold py-3 px-4 rounded-xl text-sm
-                           hover:bg-eden-gold/10 transition-all flex items-center justify-center gap-2"
+                className="border border-vm-border text-vm-text font-semibold py-3 px-4 rounded-xl text-sm
+                           hover:bg-vm-input transition-all flex items-center justify-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                 </svg>
-                Copier le lien
+                Copier
               </button>
             </div>
           </div>
         )}
 
         {reel.status === 'processing' && (
-          <div className="flex flex-col items-center py-10 mb-6">
-            <div className="w-12 h-12 border-3 border-eden-gold/30 border-t-eden-gold rounded-full animate-spin-slow" />
-            <p className="text-eden-muted mt-4">Generation en cours... Cela prend environ 3 minutes</p>
-            <p className="text-eden-dim text-sm mt-1">Cette page se met a jour automatiquement</p>
+          <div className="flex flex-col items-center py-12 mb-6 bg-blue-50/50 rounded-2xl">
+            <div className="w-12 h-12 border-[3px] border-blue-100 border-t-vm-info rounded-full animate-spin-slow" />
+            <p className="text-vm-text font-medium mt-5">Generation en cours...</p>
+            <p className="text-vm-muted text-sm mt-1">Environ 3 minutes — mise a jour automatique</p>
           </div>
         )}
 
         {reel.status === 'pending' && (
-          <div className="flex flex-col items-center py-10 mb-6">
-            <svg className="w-12 h-12 text-eden-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="flex flex-col items-center py-12 mb-6 bg-amber-50/50 rounded-2xl">
+            <svg className="w-12 h-12 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="text-eden-gold mt-4">En attente de traitement...</p>
+            <p className="text-amber-700 font-medium mt-4">En attente de traitement</p>
           </div>
         )}
 
         {reel.status === 'error' && (
-          <div className="flex flex-col items-center py-10 mb-6">
-            <svg className="w-12 h-12 text-eden-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          <div className="flex flex-col items-center py-12 mb-6 bg-red-50/50 rounded-2xl">
+            <svg className="w-12 h-12 text-vm-error" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
-            <p className="text-eden-error mt-4">Une erreur est survenue lors de la generation</p>
+            <p className="text-vm-error font-medium mt-4">Une erreur est survenue</p>
             <button
               onClick={handleRetry}
-              className="mt-4 bg-eden-gold text-eden-bg font-semibold py-2.5 px-6 rounded-xl text-sm
-                         hover:bg-eden-gold-hover transition-all"
+              className="mt-4 bg-vm-accent text-white font-semibold py-2.5 px-6 rounded-xl text-sm
+                         hover:bg-vm-accent-hover transition-all shadow-sm"
             >
               Relancer la generation
             </button>
@@ -161,51 +168,45 @@ export default function ReelModal({ reel, onClose, onDeleted, onUpdated }: ReelM
         )}
 
         {/* Property info */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-6">
-          <div>
-            <span className="text-eden-muted text-[13px]">Ville</span>
-            <p className="text-white text-[15px] mt-0.5">{reel.ville}</p>
-          </div>
-          <div>
-            <span className="text-eden-muted text-[13px]">Quartier</span>
-            <p className="text-white text-[15px] mt-0.5">{reel.quartier}</p>
-          </div>
-          <div>
-            <span className="text-eden-muted text-[13px]">Prix</span>
-            <p className="text-eden-gold font-bold text-[15px] mt-0.5">{reel.prix} €</p>
-          </div>
-          <div>
-            <span className="text-eden-muted text-[13px]">Contact</span>
-            <p className="text-white text-[15px] mt-0.5">{reel.contact}</p>
-          </div>
-          <div>
-            <span className="text-eden-muted text-[13px]">Telephone</span>
-            <p className="text-white text-[15px] mt-0.5">{reel.telephone || '—'}</p>
-          </div>
-          <div>
-            <span className="text-eden-muted text-[13px]">Date de creation</span>
-            <p className="text-eden-muted text-[15px] mt-0.5">
-              {new Date(reel.created_at).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
+        <div className="bg-vm-input rounded-2xl p-6 mb-6">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+            <div>
+              <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Ville</span>
+              <p className="text-vm-text text-[15px] mt-0.5 font-medium">{reel.ville}</p>
+            </div>
+            <div>
+              <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Quartier</span>
+              <p className="text-vm-text text-[15px] mt-0.5 font-medium">{reel.quartier}</p>
+            </div>
+            <div>
+              <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Contact</span>
+              <p className="text-vm-text text-[15px] mt-0.5">{reel.contact}</p>
+            </div>
+            <div>
+              <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Telephone</span>
+              <p className="text-vm-text text-[15px] mt-0.5">{reel.telephone || '—'}</p>
+            </div>
+            <div className="col-span-2">
+              <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Date de creation</span>
+              <p className="text-vm-muted text-sm mt-0.5">
+                {new Date(reel.created_at).toLocaleDateString('fr-FR', {
+                  day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                })}
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Delete */}
-        <div className="flex justify-end border-t border-eden-border pt-4">
+        <div className="flex justify-end">
           <button
             onClick={handleDelete}
-            className="text-eden-muted text-[13px] hover:text-eden-error transition flex items-center gap-1.5"
+            className="text-vm-dim text-[13px] hover:text-vm-error transition flex items-center gap-1.5 py-2 px-3 rounded-lg hover:bg-red-50"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Supprimer
+            Supprimer ce reel
           </button>
         </div>
       </div>

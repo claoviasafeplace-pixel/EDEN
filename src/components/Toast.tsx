@@ -38,10 +38,22 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }, 3700);
   }, []);
 
-  const borderColor = {
-    success: 'border-l-eden-success',
-    error: 'border-l-eden-error',
-    info: 'border-l-eden-info',
+  const icon = {
+    success: (
+      <svg className="w-5 h-5 text-vm-success shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    ),
+    error: (
+      <svg className="w-5 h-5 text-vm-error shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    ),
+    info: (
+      <svg className="w-5 h-5 text-vm-info shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
   };
 
   return (
@@ -52,11 +64,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={toast.id}
             className={`
-              bg-eden-surface border border-eden-border border-l-[3px] ${borderColor[toast.type]}
-              rounded-xl px-5 py-4 text-sm text-white shadow-lg max-w-sm
+              bg-white border border-vm-border rounded-2xl px-5 py-4 text-sm text-vm-text
+              shadow-lg max-w-sm flex items-center gap-3
               ${toast.fading ? 'animate-fade-out' : 'animate-slide-in'}
             `}
           >
+            {icon[toast.type]}
             {toast.message}
           </div>
         ))}

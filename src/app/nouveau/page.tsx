@@ -15,7 +15,6 @@ function formatPrix(value: string): string {
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 }
 
-// --- Photo Upload Component ---
 function PhotoUpload({
   label,
   imageUrl,
@@ -37,13 +36,10 @@ function PhotoUpload({
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
     formData.append('folder', folder);
-
     try {
       const res = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData });
       const data = await res.json();
-      if (data.secure_url) {
-        onUploaded(data.secure_url);
-      }
+      if (data.secure_url) onUploaded(data.secure_url);
     } catch (err) {
       console.error('Upload error:', err);
     }
@@ -64,14 +60,14 @@ function PhotoUpload({
 
   return (
     <div className="mb-6">
-      <label className="text-white text-sm font-semibold mb-2 block">{label}</label>
+      <label className="text-vm-text text-sm font-semibold mb-2 block">{label}</label>
       {imageUrl ? (
-        <div className="relative rounded-xl overflow-hidden h-[200px]">
+        <div className="relative rounded-2xl overflow-hidden h-[200px] shadow-sm">
           <img src={imageUrl} alt={label} className="w-full h-full object-cover" />
           <button
             onClick={() => inputRef.current?.click()}
-            className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-3 py-1.5 rounded-lg
-                       hover:bg-black/80 transition"
+            className="absolute bottom-3 right-3 bg-white/90 text-vm-text text-xs px-3 py-1.5 rounded-lg
+                       hover:bg-white transition shadow-sm font-medium"
           >
             Changer
           </button>
@@ -84,22 +80,24 @@ function PhotoUpload({
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
           className={`
-            h-[200px] rounded-xl border-2 border-dashed cursor-pointer
+            h-[200px] rounded-2xl border-2 border-dashed cursor-pointer
             flex flex-col items-center justify-center gap-3
-            bg-eden-input transition-colors
-            ${dragOver ? 'border-eden-gold bg-eden-gold/5' : 'border-eden-input-border'}
+            bg-vm-input transition-all duration-200
+            ${dragOver ? 'border-vm-accent bg-orange-50/50 scale-[1.01]' : 'border-vm-input-border hover:border-vm-muted'}
           `}
         >
           {uploading ? (
-            <div className="w-8 h-8 border-2 border-eden-gold/30 border-t-eden-gold rounded-full animate-spin-slow" />
+            <div className="w-8 h-8 border-[3px] border-vm-border border-t-vm-accent rounded-full animate-spin-slow" />
           ) : (
             <>
-              <svg className="w-10 h-10 text-eden-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-eden-muted text-sm">Glissez une image ou cliquez pour parcourir</span>
-              <span className="text-eden-dim text-xs">Format recommande : 1024x1024px, JPG/PNG</span>
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                <svg className="w-7 h-7 text-vm-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <span className="text-vm-muted text-sm font-medium">Glissez une image ou cliquez pour parcourir</span>
+              <span className="text-vm-dim text-xs">1024x1024px recommande — JPG, PNG</span>
             </>
           )}
           <input ref={inputRef} type="file" accept="image/*" onChange={handleChange} className="hidden" />
@@ -109,7 +107,6 @@ function PhotoUpload({
   );
 }
 
-// --- Stepper ---
 function Stepper({ step }: { step: number }) {
   const steps = ['Photos', 'Informations', 'Confirmation'];
   return (
@@ -118,30 +115,30 @@ function Stepper({ step }: { step: number }) {
         <div key={i} className="flex items-center">
           <div className="flex flex-col items-center">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all shadow-sm
                 ${i < step
-                  ? 'bg-eden-gold text-eden-bg'
+                  ? 'bg-vm-success text-white'
                   : i === step
-                    ? 'bg-eden-gold text-eden-bg'
-                    : 'bg-eden-border text-eden-muted'
+                    ? 'bg-vm-accent text-white'
+                    : 'bg-vm-input text-vm-dim border border-vm-border'
                 }`}
             >
               {i < step ? (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
                 i + 1
               )}
             </div>
-            <span className={`text-xs mt-2 ${i <= step ? 'text-white' : 'text-eden-muted'}`}>
+            <span className={`text-xs mt-2 font-medium ${i <= step ? 'text-vm-text' : 'text-vm-dim'}`}>
               {label}
             </span>
           </div>
           {i < steps.length - 1 && (
             <div
-              className={`w-16 sm:w-24 h-0.5 mx-2 mb-5 transition-colors ${
-                i < step ? 'bg-eden-gold' : 'bg-eden-border'
+              className={`w-16 sm:w-24 h-0.5 mx-3 mb-5 rounded-full transition-colors ${
+                i < step ? 'bg-vm-success' : 'bg-vm-border'
               }`}
             />
           )}
@@ -151,18 +148,15 @@ function Stepper({ step }: { step: number }) {
   );
 }
 
-// --- Main Wizard ---
 function WizardContent() {
   const router = useRouter();
   const { showToast } = useToast();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
-  // Step 1 - Photos
   const [facadeUrl, setFacadeUrl] = useState<string | null>(null);
   const [interiorUrl, setInteriorUrl] = useState<string | null>(null);
 
-  // Step 2 - Info
   const [ville, setVille] = useState('');
   const [quartier, setQuartier] = useState('');
   const [prix, setPrix] = useState('');
@@ -176,18 +170,13 @@ function WizardContent() {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      // 1. Create record
       const { data, error } = await supabase
         .from('reels')
         .insert({
-          ville,
-          quartier,
-          prix,
+          ville, quartier, prix,
           image_facade_url: facadeUrl,
           image_interieur_url: interiorUrl,
-          contact,
-          telephone,
-          status: 'pending',
+          contact, telephone, status: 'pending',
         })
         .select('id')
         .single();
@@ -198,28 +187,18 @@ function WizardContent() {
         return;
       }
 
-      const recordId = data.id;
-
-      // 2. POST webhook
       await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          record_id: recordId,
-          ville,
-          quartier,
-          prix,
+          record_id: data.id, ville, quartier, prix,
           image_facade_url: facadeUrl,
           image_interieur_url: interiorUrl,
-          contact,
-          telephone,
+          contact, telephone,
         }),
       });
 
-      // 3. Update status to processing
-      await supabase.from('reels').update({ status: 'processing' }).eq('id', recordId);
-
-      // 4. Toast + redirect
+      await supabase.from('reels').update({ status: 'processing' }).eq('id', data.id);
       showToast('Reel lance avec succes ! Generation en cours...', 'success');
       setTimeout(() => router.push('/'), 500);
     } catch {
@@ -228,17 +207,30 @@ function WizardContent() {
     }
   };
 
+  const inputClass = (field: string, required: boolean) =>
+    `w-full bg-vm-input text-vm-text placeholder-vm-dim py-3.5 px-4 rounded-xl text-sm
+     outline-none transition-all duration-200 border
+     ${required && touched[field] && !(field === 'ville' ? ville : field === 'quartier' ? quartier : prix).trim()
+       ? 'border-vm-error' : 'border-vm-input-border'}
+     focus:border-vm-accent focus:ring-2 focus:ring-vm-accent/10`;
+
   return (
-    <div className="min-h-screen bg-eden-bg">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-eden-bg border-b border-eden-border">
+    <div className="min-h-screen bg-vm-bg">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-vm-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex flex-col">
-            <span className="font-heading text-[28px] font-bold text-eden-gold tracking-[4px]">EDEN</span>
-            <span className="text-eden-muted text-[11px] -mt-1">Reels Immobiliers</span>
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-vm-primary rounded-xl flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span className="font-heading text-xl font-bold text-vm-primary tracking-wide">VIMMO</span>
           </Link>
-          <Link href="/" className="text-eden-muted text-sm hover:text-white transition">
-            Retour au dashboard
+          <Link href="/" className="text-vm-muted text-sm hover:text-vm-text transition font-medium flex items-center gap-1.5">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Dashboard
           </Link>
         </div>
       </header>
@@ -246,226 +238,154 @@ function WizardContent() {
       <div className="max-w-[650px] mx-auto px-6 py-10">
         <Stepper step={step} />
 
-        {/* Step 1 - Photos */}
         {step === 0 && (
-          <div className="bg-eden-surface border border-eden-border rounded-2xl p-8">
-            <h2 className="font-heading text-[22px] font-bold text-white mb-1">Photos du bien</h2>
-            <p className="text-eden-muted text-sm mb-8">
+          <div className="bg-white border border-vm-border rounded-3xl p-8 shadow-[0_2px_12px_rgba(139,109,79,0.06)]">
+            <h2 className="font-heading text-xl font-bold text-vm-text mb-1">Photos du bien</h2>
+            <p className="text-vm-muted text-sm mb-8">
               Uploadez une photo de la facade et une de l&apos;interieur
             </p>
-
-            <PhotoUpload
-              label="Photo de la facade"
-              imageUrl={facadeUrl}
-              onUploaded={setFacadeUrl}
-              folder="eden-reels/facades"
-            />
-            <PhotoUpload
-              label="Photo de l'interieur"
-              imageUrl={interiorUrl}
-              onUploaded={setInteriorUrl}
-              folder="eden-reels/interiors"
-            />
-
+            <PhotoUpload label="Photo de la facade" imageUrl={facadeUrl} onUploaded={setFacadeUrl} folder="eden-reels/facades" />
+            <PhotoUpload label="Photo de l'interieur" imageUrl={interiorUrl} onUploaded={setInteriorUrl} folder="eden-reels/interiors" />
             <button
               onClick={() => setStep(1)}
               disabled={!step1Valid}
-              className="w-full mt-4 bg-eden-gold text-eden-bg font-semibold py-3.5 rounded-xl text-sm
-                         hover:bg-eden-gold-hover hover:shadow-[0_4px_15px_rgba(200,169,81,0.3)]
-                         transition-all duration-200
-                         disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-eden-gold disabled:hover:shadow-none"
+              className="w-full mt-4 bg-vm-accent text-white font-semibold py-3.5 rounded-xl text-sm
+                         hover:bg-vm-accent-hover shadow-sm hover:shadow-md transition-all duration-200
+                         disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-sm"
             >
               Suivant
             </button>
           </div>
         )}
 
-        {/* Step 2 - Info */}
         {step === 1 && (
-          <div className="bg-eden-surface border border-eden-border rounded-2xl p-8">
-            <h2 className="font-heading text-[22px] font-bold text-white mb-6">Informations du bien</h2>
-
+          <div className="bg-white border border-vm-border rounded-3xl p-8 shadow-[0_2px_12px_rgba(139,109,79,0.06)]">
+            <h2 className="font-heading text-xl font-bold text-vm-text mb-6">Informations du bien</h2>
+            {[
+              { key: 'ville', label: 'Ville', value: ville, set: setVille, placeholder: 'ex: Tours', required: true },
+              { key: 'quartier', label: 'Quartier', value: quartier, set: setQuartier, placeholder: 'ex: Beaujardin', required: true },
+            ].map(f => (
+              <div key={f.key} className="mb-5">
+                <label className="text-vm-text text-sm font-medium mb-1.5 block">
+                  {f.label} {f.required && <span className="text-vm-accent">*</span>}
+                </label>
+                <input
+                  type="text" value={f.value}
+                  onChange={e => f.set(e.target.value)}
+                  onBlur={() => setTouched(t => ({ ...t, [f.key]: true }))}
+                  placeholder={f.placeholder}
+                  className={inputClass(f.key, f.required)}
+                />
+                {f.required && touched[f.key] && !f.value.trim() && (
+                  <p className="text-vm-error text-xs mt-1">Ce champ est requis</p>
+                )}
+              </div>
+            ))}
             <div className="mb-5">
-              <label className="text-white text-sm font-medium mb-1.5 block">Ville *</label>
-              <input
-                type="text"
-                value={ville}
-                onChange={e => setVille(e.target.value)}
-                onBlur={() => setTouched(t => ({ ...t, ville: true }))}
-                placeholder="ex: Tours"
-                className={`w-full bg-eden-input text-white placeholder-eden-dim py-3.5 px-4 rounded-[10px] text-sm
-                           outline-none transition-colors border
-                           ${touched.ville && !ville.trim() ? 'border-eden-error' : 'border-eden-input-border'}
-                           focus:border-eden-gold`}
-              />
-              {touched.ville && !ville.trim() && (
-                <p className="text-eden-error text-xs mt-1">Ce champ est requis</p>
-              )}
-            </div>
-
-            <div className="mb-5">
-              <label className="text-white text-sm font-medium mb-1.5 block">Quartier *</label>
-              <input
-                type="text"
-                value={quartier}
-                onChange={e => setQuartier(e.target.value)}
-                onBlur={() => setTouched(t => ({ ...t, quartier: true }))}
-                placeholder="ex: Beaujardin"
-                className={`w-full bg-eden-input text-white placeholder-eden-dim py-3.5 px-4 rounded-[10px] text-sm
-                           outline-none transition-colors border
-                           ${touched.quartier && !quartier.trim() ? 'border-eden-error' : 'border-eden-input-border'}
-                           focus:border-eden-gold`}
-              />
-              {touched.quartier && !quartier.trim() && (
-                <p className="text-eden-error text-xs mt-1">Ce champ est requis</p>
-              )}
-            </div>
-
-            <div className="mb-5">
-              <label className="text-white text-sm font-medium mb-1.5 block">Prix *</label>
+              <label className="text-vm-text text-sm font-medium mb-1.5 block">
+                Prix <span className="text-vm-accent">*</span>
+              </label>
               <div className="relative">
                 <input
-                  type="text"
-                  value={prix}
+                  type="text" value={prix}
                   onChange={e => setPrix(formatPrix(e.target.value))}
                   onBlur={() => setTouched(t => ({ ...t, prix: true }))}
                   placeholder="ex: 250 000"
-                  className={`w-full bg-eden-input text-white placeholder-eden-dim py-3.5 px-4 pr-10 rounded-[10px] text-sm
-                             outline-none transition-colors border
-                             ${touched.prix && !prix.trim() ? 'border-eden-error' : 'border-eden-input-border'}
-                             focus:border-eden-gold`}
+                  className={inputClass('prix', true) + ' pr-10'}
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-eden-muted text-sm">€</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-vm-muted text-sm font-medium">€</span>
               </div>
               {touched.prix && !prix.trim() && (
-                <p className="text-eden-error text-xs mt-1">Ce champ est requis</p>
+                <p className="text-vm-error text-xs mt-1">Ce champ est requis</p>
               )}
             </div>
-
             <div className="mb-5">
-              <label className="text-white text-sm font-medium mb-1.5 block">Contact</label>
-              <input
-                type="text"
-                value={contact}
-                onChange={e => setContact(e.target.value)}
-                className="w-full bg-eden-input text-white placeholder-eden-dim py-3.5 px-4 rounded-[10px] text-sm
-                           outline-none transition-colors border border-eden-input-border focus:border-eden-gold"
-              />
+              <label className="text-vm-text text-sm font-medium mb-1.5 block">Contact</label>
+              <input type="text" value={contact} onChange={e => setContact(e.target.value)}
+                className="w-full bg-vm-input text-vm-text py-3.5 px-4 rounded-xl text-sm outline-none transition-all border border-vm-input-border focus:border-vm-accent focus:ring-2 focus:ring-vm-accent/10" />
             </div>
-
             <div className="mb-8">
-              <label className="text-white text-sm font-medium mb-1.5 block">Telephone</label>
-              <input
-                type="text"
-                value={telephone}
-                onChange={e => setTelephone(e.target.value)}
+              <label className="text-vm-text text-sm font-medium mb-1.5 block">Telephone</label>
+              <input type="text" value={telephone} onChange={e => setTelephone(e.target.value)}
                 placeholder="06 XX XX XX XX"
-                className="w-full bg-eden-input text-white placeholder-eden-dim py-3.5 px-4 rounded-[10px] text-sm
-                           outline-none transition-colors border border-eden-input-border focus:border-eden-gold"
-              />
+                className="w-full bg-vm-input text-vm-text placeholder-vm-dim py-3.5 px-4 rounded-xl text-sm outline-none transition-all border border-vm-input-border focus:border-vm-accent focus:ring-2 focus:ring-vm-accent/10" />
             </div>
-
             <div className="flex gap-4">
-              <button
-                onClick={() => setStep(0)}
-                className="flex-1 border border-eden-gold text-eden-gold font-semibold py-3.5 rounded-xl text-sm
-                           hover:bg-eden-gold/10 transition-all"
-              >
+              <button onClick={() => setStep(0)}
+                className="flex-1 border border-vm-border text-vm-text font-semibold py-3.5 rounded-xl text-sm hover:bg-vm-input transition-all">
                 Precedent
               </button>
-              <button
-                onClick={() => setStep(2)}
-                disabled={!step2Valid}
-                className="flex-1 bg-eden-gold text-eden-bg font-semibold py-3.5 rounded-xl text-sm
-                           hover:bg-eden-gold-hover hover:shadow-[0_4px_15px_rgba(200,169,81,0.3)]
-                           transition-all duration-200
-                           disabled:opacity-40 disabled:cursor-not-allowed"
-              >
+              <button onClick={() => setStep(2)} disabled={!step2Valid}
+                className="flex-1 bg-vm-accent text-white font-semibold py-3.5 rounded-xl text-sm hover:bg-vm-accent-hover shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed">
                 Suivant
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 3 - Confirmation */}
         {step === 2 && (
-          <div className="bg-eden-surface border border-eden-border rounded-2xl p-8">
-            <h2 className="font-heading text-[22px] font-bold text-white mb-1">Recapitulatif</h2>
-            <p className="text-eden-muted text-sm mb-8">
-              Verifiez les informations avant de lancer la generation
-            </p>
-
-            {/* Photo preview */}
+          <div className="bg-white border border-vm-border rounded-3xl p-8 shadow-[0_2px_12px_rgba(139,109,79,0.06)]">
+            <h2 className="font-heading text-xl font-bold text-vm-text mb-1">Recapitulatif</h2>
+            <p className="text-vm-muted text-sm mb-8">Verifiez les informations avant de lancer</p>
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="relative rounded-xl overflow-hidden h-[200px]">
+              <div className="relative rounded-2xl overflow-hidden h-[200px] shadow-sm">
                 {facadeUrl && <img src={facadeUrl} alt="Facade" className="w-full h-full object-cover" />}
-                <div className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-xs py-1.5 text-center">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent text-white text-xs py-2 text-center font-medium">
                   Facade
                 </div>
               </div>
-              <div className="relative rounded-xl overflow-hidden h-[200px]">
+              <div className="relative rounded-2xl overflow-hidden h-[200px] shadow-sm">
                 {interiorUrl && <img src={interiorUrl} alt="Interieur" className="w-full h-full object-cover" />}
-                <div className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-xs py-1.5 text-center">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent text-white text-xs py-2 text-center font-medium">
                   Interieur
                 </div>
               </div>
             </div>
-
-            {/* Info recap */}
-            <div className="bg-eden-input rounded-xl p-5 mb-8">
+            <div className="bg-vm-input rounded-2xl p-5 mb-8">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <span className="text-eden-muted text-xs">Ville</span>
-                  <p className="text-white text-sm mt-0.5">{ville}</p>
+                  <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Ville</span>
+                  <p className="text-vm-text text-sm mt-0.5 font-medium">{ville}</p>
                 </div>
                 <div>
-                  <span className="text-eden-muted text-xs">Quartier</span>
-                  <p className="text-white text-sm mt-0.5">{quartier}</p>
+                  <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Quartier</span>
+                  <p className="text-vm-text text-sm mt-0.5 font-medium">{quartier}</p>
                 </div>
                 <div>
-                  <span className="text-eden-muted text-xs">Prix</span>
-                  <p className="text-eden-gold font-bold text-sm mt-0.5">{prix} €</p>
+                  <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Prix</span>
+                  <p className="text-vm-accent font-bold text-sm mt-0.5">{prix} €</p>
                 </div>
                 <div>
-                  <span className="text-eden-muted text-xs">Contact</span>
-                  <p className="text-white text-sm mt-0.5">{contact}</p>
+                  <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Contact</span>
+                  <p className="text-vm-text text-sm mt-0.5">{contact}</p>
                 </div>
                 {telephone && (
                   <div>
-                    <span className="text-eden-muted text-xs">Telephone</span>
-                    <p className="text-white text-sm mt-0.5">{telephone}</p>
+                    <span className="text-vm-muted text-xs uppercase tracking-wider font-medium">Telephone</span>
+                    <p className="text-vm-text text-sm mt-0.5">{telephone}</p>
                   </div>
                 )}
               </div>
             </div>
-
-            <button
-              onClick={() => setStep(1)}
-              className="w-full mb-3 border border-eden-gold text-eden-gold font-semibold py-3 rounded-xl text-sm
-                         hover:bg-eden-gold/10 transition-all"
-            >
+            <button onClick={() => setStep(1)}
+              className="w-full mb-3 border border-vm-border text-vm-text font-semibold py-3 rounded-xl text-sm hover:bg-vm-input transition-all">
               Precedent
             </button>
-
-            <button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="w-full bg-eden-gold text-eden-bg font-bold py-4 rounded-xl text-base
-                         hover:bg-eden-gold-hover transition-all duration-200
-                         animate-pulse-gold
-                         disabled:opacity-60 disabled:cursor-not-allowed disabled:animate-none
-                         flex items-center justify-center gap-2"
-            >
+            <button onClick={handleSubmit} disabled={submitting}
+              className="w-full bg-vm-accent text-white font-bold py-4 rounded-xl text-base
+                         hover:bg-vm-accent-hover transition-all duration-200 shadow-md hover:shadow-lg
+                         animate-pulse-glow disabled:opacity-60 disabled:cursor-not-allowed disabled:animate-none
+                         flex items-center justify-center gap-2">
               {submitting ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-eden-bg/30 border-t-eden-bg rounded-full animate-spin-slow" />
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin-slow" />
                   Lancement...
                 </>
               ) : (
                 <>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Lancer la generation
                 </>
