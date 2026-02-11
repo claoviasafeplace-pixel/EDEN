@@ -1,7 +1,7 @@
 'use client';
 
 import { Reel } from '@/lib/types';
-import { Clock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Clock, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
 
 function timeAgo(dateStr: string): string {
   const now = new Date();
@@ -19,44 +19,13 @@ function timeAgo(dateStr: string): string {
 }
 
 const statusConfig = {
-  pending: {
-    label: 'En attente',
-    icon: Clock,
-    bg: 'bg-amber-50',
-    text: 'text-amber-600',
-    border: 'border-amber-200/60',
-    pulse: false,
-  },
-  processing: {
-    label: 'Generation...',
-    icon: Loader2,
-    bg: 'bg-blue-50',
-    text: 'text-blue-500',
-    border: 'border-blue-200/60',
-    pulse: true,
-  },
-  completed: {
-    label: 'Pret',
-    icon: CheckCircle,
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-500',
-    border: 'border-emerald-200/60',
-    pulse: false,
-  },
-  error: {
-    label: 'Erreur',
-    icon: AlertCircle,
-    bg: 'bg-red-50',
-    text: 'text-red-500',
-    border: 'border-red-200/60',
-    pulse: false,
-  },
+  pending: { label: 'En attente', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50', pulse: false },
+  processing: { label: 'Rendu IA', icon: Zap, color: 'text-blue-500', bg: 'bg-blue-50', pulse: true },
+  completed: { label: 'Pret', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50', pulse: false },
+  error: { label: 'Erreur', icon: AlertCircle, color: 'text-red-500', bg: 'bg-red-50', pulse: false },
 };
 
-interface ReelCardProps {
-  reel: Reel;
-  onClick: () => void;
-}
+interface ReelCardProps { reel: Reel; onClick: () => void; }
 
 export default function ReelCard({ reel, onClick }: ReelCardProps) {
   const status = statusConfig[reel.status];
@@ -65,10 +34,9 @@ export default function ReelCard({ reel, onClick }: ReelCardProps) {
   return (
     <div
       onClick={onClick}
-      className="bg-white border border-vm-border rounded-[1.5rem] overflow-hidden cursor-pointer
-                 shadow-[0_1px_4px_rgba(0,0,0,0.03)]
-                 hover:-translate-y-1.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)]
-                 transition-all duration-300 group"
+      className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden cursor-pointer
+                 shadow-sm hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)]
+                 hover:-translate-y-1 transition-all duration-500 group"
     >
       {reel.image_facade_url ? (
         <div className="aspect-[16/10] overflow-hidden relative">
@@ -77,39 +45,43 @@ export default function ReelCard({ reel, onClick }: ReelCardProps) {
             alt={`${reel.ville} - ${reel.quartier}`}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          <div className="absolute bottom-4 left-5">
+            <span className={`${status.bg} ${status.color} px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider
+                             flex items-center gap-1.5 backdrop-blur-sm ${status.pulse ? 'animate-pulse-badge' : ''}`}>
+              <StatusIcon className={`w-3 h-3 ${status.pulse ? 'animate-spin-slow' : ''}`} />
+              {status.label}
+            </span>
+          </div>
         </div>
       ) : (
-        <div className="aspect-[16/10] bg-gradient-to-br from-vm-input to-vm-bg flex items-center justify-center">
-          <div className="w-14 h-14 bg-white/80 rounded-2xl flex items-center justify-center">
-            <svg className="w-7 h-7 text-vm-dim" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4" />
+        <div className="aspect-[16/10] bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center relative">
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+            <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4" />
             </svg>
+          </div>
+          <div className="absolute bottom-4 left-5">
+            <span className={`${status.bg} ${status.color} px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5`}>
+              <StatusIcon className="w-3 h-3" />
+              {status.label}
+            </span>
           </div>
         </div>
       )}
 
-      <div className="p-5">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-heading font-bold text-[15px] text-vm-text leading-tight">
-            {reel.ville} — {reel.quartier}
-          </h3>
-          <span className={`${status.bg} ${status.text} border ${status.border} px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0 ml-3 ${status.pulse ? 'animate-pulse-badge' : ''}`}>
-            <StatusIcon className={`w-3 h-3 ${status.pulse ? 'animate-spin-slow' : ''}`} />
-            {status.label}
-          </span>
-        </div>
-
-        <p className="text-vm-primary font-bold text-lg">
+      <div className="p-6">
+        <h3 className="font-heading font-bold text-base text-vm-text leading-tight">
+          {reel.ville} — {reel.quartier}
+        </h3>
+        <p className="text-vm-primary font-black text-xl mt-1">
           {reel.prix} €
         </p>
-
-        <div className="flex items-center justify-between mt-4 pt-3.5 border-t border-vm-border-light">
-          <span className="text-vm-muted text-xs font-medium">
+        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-50">
+          <span className="text-slate-400 text-xs font-medium">
             {timeAgo(reel.created_at)}
           </span>
-          <span className="text-vm-primary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <span className="text-vm-primary text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Voir le detail →
           </span>
         </div>

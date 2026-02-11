@@ -1,84 +1,108 @@
 'use client';
 
-import { LayoutDashboard, Film, Bell, Settings, Plus, Sparkles } from 'lucide-react';
+import {
+  Video, Plus, LayoutDashboard, Camera, FileText, Settings, Bell, Sparkles, Layers
+} from 'lucide-react';
+
+type TabId = 'dashboard' | 'photos' | 'bio' | 'settings';
 
 interface SidebarProps {
+  activeTab: TabId;
+  onTabChange: (tab: TabId) => void;
   onCreateClick: () => void;
+  processingCount?: number;
 }
 
-function NavItem({ icon, label, active }: { icon: React.ReactNode; label: string; active?: boolean }) {
+function NavItem({
+  icon: Icon, label, active, onClick, badge,
+}: {
+  icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string;
+}) {
   return (
     <button
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200
-        ${active
-          ? 'bg-vm-primary text-white shadow-[0_4px_12px_rgba(193,134,107,0.25)]'
-          : 'text-vm-text-secondary hover:bg-vm-primary-light hover:text-vm-text'
-        }`}
+      onClick={onClick}
+      className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group relative ${
+        active
+          ? 'bg-vm-primary-light text-vm-primary'
+          : 'text-slate-400 hover:bg-slate-50 hover:text-vm-text'
+      }`}
     >
-      {icon}
-      {label}
+      {active && <div className="absolute left-0 w-1.5 h-6 bg-vm-primary rounded-r-full" />}
+      <Icon className={`w-5 h-5 ${active ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'} transition-opacity`} />
+      <span className={`text-[15px] hidden lg:block ${active ? 'font-black' : 'font-bold'}`}>{label}</span>
+      {badge && (
+        <span className="ml-auto bg-vm-primary text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden lg:block
+                         shadow-[0_2px_8px_rgba(193,134,107,0.25)]">
+          {badge}
+        </span>
+      )}
     </button>
   );
 }
 
-export default function Sidebar({ onCreateClick }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, onCreateClick, processingCount = 0 }: SidebarProps) {
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-white border-r border-vm-border flex flex-col z-40">
+    <aside className="w-20 lg:w-72 bg-white border-r border-slate-100 flex flex-col z-20 shrink-0">
       {/* Logo */}
-      <div className="px-6 pt-7 pb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-vm-primary rounded-2xl flex items-center justify-center shadow-[0_2px_8px_rgba(193,134,107,0.25)]">
-            <Film className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h1 className="font-heading text-[22px] font-extrabold text-vm-text tracking-tight leading-none">
-              VIMMO
-            </h1>
-            <span className="text-vm-muted text-[10px] font-semibold tracking-[0.15em] uppercase">
-              Reels immobiliers
-            </span>
-          </div>
+      <div className="p-6 lg:p-8 flex items-center gap-3">
+        <div className="bg-vm-primary p-2.5 rounded-2xl shadow-[0_8px_24px_rgba(193,134,107,0.25)] rotate-3 hover:rotate-0 transition-transform">
+          <Video className="text-white w-6 h-6" />
+        </div>
+        <div className="hidden lg:block leading-none">
+          <span className="text-2xl font-black tracking-tighter text-vm-text">VIMMO</span>
+          <p className="text-[10px] text-vm-primary font-bold tracking-[0.2em] mt-1 uppercase">Immo Intelligence</p>
         </div>
       </div>
 
-      {/* Create button */}
-      <div className="px-5 mb-6">
+      {/* CTA Button */}
+      <div className="px-4 lg:px-6 mb-6">
         <button
           onClick={onCreateClick}
-          className="w-full bg-vm-primary text-white font-semibold py-3.5 rounded-2xl text-sm
-                     hover:bg-vm-primary-hover shadow-[0_4px_16px_rgba(193,134,107,0.3)]
-                     hover:shadow-[0_6px_24px_rgba(193,134,107,0.4)]
-                     transition-all duration-300 flex items-center justify-center gap-2
-                     active:scale-[0.98]"
+          className="w-full bg-vm-primary hover:bg-vm-primary-dark text-white py-3 lg:py-4 rounded-2xl font-bold
+                     flex items-center justify-center gap-3
+                     shadow-[0_8px_32px_rgba(193,134,107,0.3)]
+                     transition-all hover:-translate-y-0.5 active:scale-95"
         >
           <Plus className="w-5 h-5" />
-          Nouveau Reel
+          <span className="hidden lg:inline">Nouveau Reel</span>
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="px-4 flex-1 flex flex-col gap-1">
-        <NavItem icon={<LayoutDashboard className="w-[18px] h-[18px]" />} label="Dashboard" active />
-        <NavItem icon={<Film className="w-[18px] h-[18px]" />} label="Mes Reels" />
-        <NavItem icon={<Bell className="w-[18px] h-[18px]" />} label="Notifications" />
-        <NavItem icon={<Settings className="w-[18px] h-[18px]" />} label="Parametres" />
+      {/* Nav */}
+      <nav className="flex-1 px-3 lg:px-4 space-y-1">
+        <NavItem icon={LayoutDashboard} label="Tableau de bord" active={activeTab === 'dashboard'} onClick={() => onTabChange('dashboard')} />
+        <NavItem icon={Layers} label="Mes Reels" active={false} onClick={() => onTabChange('dashboard')} />
+        <NavItem icon={Camera} label="Photos IA" active={activeTab === 'photos'} onClick={() => onTabChange('photos')} />
+        <NavItem icon={FileText} label="Bio & Textes" active={activeTab === 'bio'} onClick={() => onTabChange('bio')} />
+        <NavItem icon={Bell} label="Notifications" badge={processingCount > 0 ? String(processingCount) : undefined} />
+        <div className="pt-4 mt-4 border-t border-slate-50">
+          <NavItem icon={Settings} label="Parametres" active={activeTab === 'settings'} onClick={() => onTabChange('settings')} />
+        </div>
       </nav>
 
       {/* Pro card */}
-      <div className="px-5 pb-6">
-        <div className="bg-gradient-to-br from-vm-primary/[0.07] to-vm-primary/[0.02] border border-vm-primary/15
-                        rounded-2xl p-5">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-vm-primary" />
-            <span className="text-vm-primary font-bold text-xs uppercase tracking-wider">Pro</span>
+      <div className="p-4 lg:p-6">
+        <div className="bg-vm-text rounded-[1.5rem] lg:rounded-[2rem] p-4 lg:p-6 relative overflow-hidden group hidden lg:block">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-vm-primary/20 rounded-full blur-2xl group-hover:bg-vm-primary/40 transition-colors duration-500" />
+          <div className="flex items-center gap-2 mb-2 relative z-10">
+            <Sparkles className="w-3.5 h-3.5 text-vm-primary" />
+            <p className="text-vm-primary text-[10px] font-black uppercase tracking-widest">Compte ERA Pro</p>
           </div>
-          <p className="text-vm-text text-[13px] font-semibold leading-snug mb-1">
-            Passez a la vitesse superieure
+          <p className="text-white text-sm font-medium mb-4 relative z-10 leading-snug">
+            Generez des videos illimitees en 4K.
           </p>
-          <p className="text-vm-muted text-[11px] leading-relaxed">
-            Reels illimites, templates premium, publication auto
-          </p>
+          <button className="w-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-3 rounded-xl transition-all border border-white/10 backdrop-blur-sm">
+            Upgrade
+          </button>
         </div>
+        {/* Mobile CTA */}
+        <button
+          onClick={onCreateClick}
+          className="lg:hidden w-12 h-12 bg-vm-primary rounded-full flex items-center justify-center text-white
+                     shadow-[0_4px_16px_rgba(193,134,107,0.3)] mx-auto"
+        >
+          <Plus className="w-5 h-5" />
+        </button>
       </div>
     </aside>
   );
