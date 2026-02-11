@@ -63,73 +63,72 @@ export default function BioTab() {
     else { setCopiedTk(true); setTimeout(() => setCopiedTk(false), 2000); }
   };
 
-  const inputClass = "w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:border-vm-primary/30 rounded-[1.5rem] outline-none text-slate-700 font-bold placeholder:text-slate-300 transition-all text-sm";
+  const inputClass = "w-full px-4 h-11 bg-slate-50 border border-slate-200 focus:border-vm-primary focus:ring-1 focus:ring-vm-primary/20 rounded-lg outline-none text-sm text-slate-700 placeholder:text-slate-400 transition-all";
 
   return (
-    <div className="space-y-12">
-      {/* Header */}
+    <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-black tracking-tight text-vm-text">Bio & Textes</h1>
-        <p className="text-slate-500 mt-2 font-medium">Generez des descriptions optimisees pour Instagram et TikTok.</p>
+        <h1 className="text-2xl font-bold text-vm-text">Bio & Textes</h1>
+        <p className="text-slate-500 mt-1 text-sm">Generez des descriptions optimisees pour Instagram et TikTok.</p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_1fr] gap-10">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Left — Form */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Property Info */}
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm space-y-6">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+            <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-black uppercase tracking-widest text-vm-primary">Informations du bien</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Informations du bien</span>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 ml-1">Ville *</label>
+                <label className="text-xs font-medium text-slate-500">Ville *</label>
                 <input type="text" value={ville} onChange={e => setVille(e.target.value)} placeholder="Tours" className={inputClass} />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 ml-1">Quartier *</label>
+                <label className="text-xs font-medium text-slate-500">Quartier *</label>
                 <input type="text" value={quartier} onChange={e => setQuartier(e.target.value)} placeholder="Beaujardin" className={inputClass} />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 ml-1">Prix *</label>
+              <label className="text-xs font-medium text-slate-500">Prix *</label>
               <input type="text" value={prix} onChange={e => setPrix(e.target.value)} placeholder="250 000 €" className={inputClass} />
             </div>
           </div>
 
           {/* Tone selector */}
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-black uppercase tracking-widest text-vm-primary">Ton du texte</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Ton du texte</span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {tones.map(t => (
                 <button
                   key={t.id}
                   onClick={() => { setTone(t.id); setGenerated(false); }}
-                  className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                  className={`p-3.5 rounded-xl border text-left transition-all ${
                     tone === t.id
                       ? 'border-vm-primary bg-vm-primary-light'
-                      : 'border-slate-100 hover:border-slate-200 hover:bg-slate-50'
+                      : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  <span className="text-2xl">{t.emoji}</span>
-                  <p className={`text-sm font-black mt-2 ${tone === t.id ? 'text-vm-primary' : 'text-vm-text'}`}>{t.label}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5 font-medium">{t.desc}</p>
+                  <span className="text-lg">{t.emoji}</span>
+                  <p className={`text-sm font-medium mt-1.5 ${tone === t.id ? 'text-vm-primary' : 'text-vm-text'}`}>{t.label}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">{t.desc}</p>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Platform */}
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-2">
               <Hash className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-black uppercase tracking-widest text-vm-primary">Plateforme</span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Plateforme</span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {[
                 { id: 'instagram' as Platform, label: 'Instagram', icon: Instagram },
                 { id: 'tiktok' as Platform, label: 'TikTok', icon: Zap },
@@ -138,9 +137,9 @@ export default function BioTab() {
                 <button
                   key={p.id}
                   onClick={() => setPlatform(p.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-bold transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-medium transition-all ${
                     platform === p.id
-                      ? 'bg-vm-text text-white shadow-lg'
+                      ? 'bg-vm-text text-white'
                       : 'bg-slate-50 text-slate-400 hover:text-vm-text hover:bg-slate-100'
                   }`}
                 >
@@ -155,58 +154,52 @@ export default function BioTab() {
           <button
             onClick={handleGenerate}
             disabled={!isValid}
-            className="w-full bg-vm-primary text-white px-8 py-5 rounded-[2rem] font-black text-lg
-                       shadow-[0_8px_32px_rgba(193,134,107,0.3)] hover:bg-vm-primary-dark transition-all
-                       flex items-center justify-center gap-3 active:scale-[0.98]
-                       disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+            className="w-full bg-vm-primary text-white h-11 rounded-lg font-medium text-sm
+                       hover:bg-vm-primary-dark transition-colors
+                       flex items-center justify-center gap-2
+                       disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <Sparkles className="w-5 h-5" /> Generer les textes
+            <Sparkles className="w-4 h-4" /> Generer les textes
           </button>
         </div>
 
         {/* Right — Results */}
         <div className="space-y-6">
           {!generated ? (
-            <div className="relative group h-full min-h-[400px]">
-              <div className="absolute -inset-1 bg-gradient-to-r from-vm-primary/10 to-orange-200/10 rounded-[3rem] blur opacity-25 group-hover:opacity-50 transition duration-700" />
-              <div className="relative bg-white border border-slate-100 rounded-[3rem] h-full flex flex-col items-center justify-center text-center p-12">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-vm-primary blur-3xl opacity-10 animate-glow-bg" />
-                  <div className="bg-vm-primary-light w-24 h-24 rounded-[2rem] flex items-center justify-center relative border border-vm-primary/10">
-                    <FileText className="w-10 h-10 text-vm-primary" />
-                    <div className="absolute -top-2 -right-2 bg-vm-primary p-2 rounded-full text-white shadow-lg">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                  </div>
+            <div className="bg-white border border-slate-200 rounded-xl h-full min-h-[380px] flex flex-col items-center justify-center text-center p-10">
+              <div className="w-16 h-16 bg-vm-primary-light rounded-2xl flex items-center justify-center relative">
+                <FileText className="w-7 h-7 text-vm-primary" />
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-vm-primary rounded-full flex items-center justify-center">
+                  <Sparkles className="w-3 h-3 text-white" />
                 </div>
-                <h3 className="text-2xl font-black text-vm-text tracking-tight mt-8">Vos textes apparaitront ici</h3>
-                <p className="text-slate-400 mt-3 font-medium max-w-sm">
-                  Remplissez les informations et cliquez sur generer pour obtenir des descriptions optimisees.
-                </p>
               </div>
+              <h3 className="text-lg font-semibold text-vm-text mt-5">Vos textes apparaitront ici</h3>
+              <p className="text-slate-400 mt-2 text-sm max-w-sm">
+                Remplissez les informations et cliquez sur generer pour obtenir des descriptions optimisees.
+              </p>
             </div>
           ) : (
-            <div className="space-y-6 animate-fade-in">
+            <div className="space-y-5 animate-fade-in">
               {(platform === 'instagram' || platform === 'both') && (
-                <div className="bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-sm">
-                  <div className="px-8 py-5 border-b border-slate-50 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
-                        <Instagram className="w-4 h-4 text-white" />
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-lg flex items-center justify-center">
+                        <Instagram className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-sm font-black text-vm-text">Instagram</span>
-                      <span className="text-[10px] text-slate-400 font-bold">{getBio('instagram').length} / 2200 caracteres</span>
+                      <span className="text-sm font-medium text-vm-text">Instagram</span>
+                      <span className="text-[10px] text-slate-400">{getBio('instagram').length} / 2200</span>
                     </div>
                     <button
                       onClick={() => handleCopy(getBio('instagram'), 'ig')}
-                      className="flex items-center gap-1.5 text-xs font-bold text-vm-primary hover:text-vm-primary-dark transition-colors px-3 py-2 rounded-xl hover:bg-vm-primary-light"
+                      className="flex items-center gap-1.5 text-xs font-medium text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light"
                     >
-                      {copiedIg ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copiedIg ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       {copiedIg ? 'Copie !' : 'Copier'}
                     </button>
                   </div>
-                  <div className="p-8">
-                    <pre className="whitespace-pre-wrap text-sm text-slate-600 font-medium leading-relaxed font-sans">
+                  <div className="p-5">
+                    <pre className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed font-sans">
                       {getBio('instagram')}
                     </pre>
                   </div>
@@ -214,39 +207,39 @@ export default function BioTab() {
               )}
 
               {(platform === 'tiktok' || platform === 'both') && (
-                <div className="bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-sm">
-                  <div className="px-8 py-5 border-b border-slate-50 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-vm-text rounded-xl flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-white" />
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 bg-vm-text rounded-lg flex items-center justify-center">
+                        <Zap className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-sm font-black text-vm-text">TikTok</span>
-                      <span className="text-[10px] text-slate-400 font-bold">{getBio('tiktok').length} / 2200 caracteres</span>
+                      <span className="text-sm font-medium text-vm-text">TikTok</span>
+                      <span className="text-[10px] text-slate-400">{getBio('tiktok').length} / 2200</span>
                     </div>
                     <button
                       onClick={() => handleCopy(getBio('tiktok'), 'tk')}
-                      className="flex items-center gap-1.5 text-xs font-bold text-vm-primary hover:text-vm-primary-dark transition-colors px-3 py-2 rounded-xl hover:bg-vm-primary-light"
+                      className="flex items-center gap-1.5 text-xs font-medium text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light"
                     >
-                      {copiedTk ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copiedTk ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       {copiedTk ? 'Copie !' : 'Copier'}
                     </button>
                   </div>
-                  <div className="p-8">
-                    <pre className="whitespace-pre-wrap text-sm text-slate-600 font-medium leading-relaxed font-sans">
+                  <div className="p-5">
+                    <pre className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed font-sans">
                       {getBio('tiktok')}
                     </pre>
                   </div>
                 </div>
               )}
 
-              {/* Publish CTA */}
-              <div className="bg-vm-text p-6 rounded-[2rem] flex gap-5 items-center">
-                <div className="bg-vm-primary w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_4px_16px_rgba(193,134,107,0.3)] shrink-0">
-                  <ArrowRight className="w-7 h-7 text-white" />
+              {/* Tip card */}
+              <div className="bg-slate-50 border border-slate-100 p-5 rounded-xl flex gap-4 items-center">
+                <div className="w-10 h-10 bg-vm-primary rounded-lg flex items-center justify-center shrink-0">
+                  <ArrowRight className="w-5 h-5 text-white" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-white text-sm font-black uppercase tracking-tight">Publication rapide</p>
-                  <p className="text-slate-400 text-xs leading-relaxed mt-1 font-medium">
+                <div>
+                  <p className="text-sm font-medium text-vm-text">Publication rapide</p>
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Copiez le texte et publiez directement sur vos reseaux.
                   </p>
                 </div>
