@@ -1,7 +1,9 @@
 'use client';
 
-import { Reel } from '@/lib/types';
-import { Clock, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
+import type { Reel } from '@/lib/types';
+import { PIPELINE_LABELS } from '@/lib/types';
+import { formatPrix, formatLocation } from '@/lib/formatters';
+import { Play, ExternalLink } from 'lucide-react';
 
 function timeAgo(dateStr: string): string {
   const now = new Date();
@@ -18,60 +20,87 @@ function timeAgo(dateStr: string): string {
   return date.toLocaleDateString('fr-FR');
 }
 
-const statusConfig = {
-  pending: { label: 'En attente', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50', pulse: false },
-  processing: { label: 'Rendu IA', icon: Zap, color: 'text-blue-600', bg: 'bg-blue-50', pulse: true },
-  completed: { label: 'Pret', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50', pulse: false },
-  error: { label: 'Erreur', icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50', pulse: false },
+const statusStyles: Record<string, string> = {
+  pending: 'bg-amber-500/80 text-white border-amber-400',
+  processing: 'bg-blue-500/80 text-white border-blue-400',
+  completed: 'bg-emerald-500/80 text-white border-emerald-400',
+  error: 'bg-red-500/80 text-white border-red-400',
+};
+
+const statusLabels: Record<string, string> = {
+  pending: 'en attente',
+  processing: 'en cours',
+  completed: 'termine',
+  error: 'erreur',
 };
 
 export default function ReelCard({ reel, onClick }: { reel: Reel; onClick: () => void }) {
-  const status = statusConfig[reel.status];
-  const StatusIcon = status.icon;
+  const coverUrl = reel.media_items?.[0]?.url || reel.image_facade_url;
+  const location = formatLocation(reel.ville, reel.quartier);
+  const prix = formatPrix(reel.prix);
+  const dateStr = timeAgo(reel.created_at);
+
+  const pipelineLabel = reel.status === 'processing' && reel.pipeline_stage
+    ? PIPELINE_LABELS[reel.pipeline_stage]
+    : null;
+  const badgeLabel = pipelineLabel || statusLabels[reel.status] || reel.status;
 
   return (
-    <div onClick={onClick}
-      className="bg-white border border-slate-200 rounded-xl overflow-hidden cursor-pointer
-                 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group">
-      {reel.image_facade_url ? (
-        <div className="aspect-[16/10] overflow-hidden relative">
-          <img src={reel.image_facade_url} alt={`${reel.ville}`}
-            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-3">
-            <span className={`${status.bg} ${status.color} px-2 py-0.5 rounded text-[10px] font-medium
-                             flex items-center gap-1 ${status.pulse ? 'animate-pulse-badge' : ''}`}>
-              <StatusIcon className={`w-3 h-3 ${status.pulse ? 'animate-spin-slow' : ''}`} />
-              {status.label}
-            </span>
+    <div
+      onClick={onClick}
+      className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1"
+    >
+      <div className="aspect-[9/16] relative bg-slate-100 overflow-hidden">
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            alt={reel.ville || 'Bien'}
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+            <Play size={32} className="text-slate-300" />
+          </div>
+        )}
+
+        {/* Status badge — top left */}
+        <div className="absolute top-4 left-4">
+          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest backdrop-blur-md shadow-sm border ${statusStyles[reel.status]}`}>
+            {badgeLabel}
+          </span>
+        </div>
+
+        {/* Play button — top right */}
+        <div className="absolute top-4 right-4">
+          <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 hover:bg-white/40 transition-colors">
+            <Play size={14} fill="currentColor" />
           </div>
         </div>
-      ) : (
-        <div className="aspect-[16/10] bg-slate-50 flex items-center justify-center relative">
-          <Video className="w-8 h-8 text-slate-200" />
-          <div className="absolute bottom-3 left-3">
-            <span className={`${status.bg} ${status.color} px-2 py-0.5 rounded text-[10px] font-medium flex items-center gap-1`}>
-              <StatusIcon className="w-3 h-3" /> {status.label}
-            </span>
+
+        {/* Overlay au survol */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+          <p className="text-white text-xs font-medium mb-1">{dateStr}</p>
+          <div className="w-full py-2 bg-white rounded-lg text-slate-900 font-bold text-xs flex items-center justify-center gap-2">
+            <ExternalLink size={12} /> Voir le rendu
           </div>
         </div>
-      )}
+
+        {/* Progress bar during processing */}
+        {reel.status === 'processing' && reel.pipeline_progress > 0 && (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/20 z-10">
+            <div
+              className="h-full bg-blue-400 transition-all duration-500"
+              style={{ width: `${reel.pipeline_progress}%` }}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
       <div className="p-4">
-        <p className="text-sm font-medium text-vm-text">{reel.ville} — {reel.quartier}</p>
-        <p className="text-vm-primary font-semibold text-base mt-0.5">{reel.prix} €</p>
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-          <span className="text-slate-400 text-xs">{timeAgo(reel.created_at)}</span>
-          <span className="text-vm-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">Voir →</span>
-        </div>
+        <h3 className="font-bold text-slate-900 mb-0.5 truncate">{location}</h3>
+        <p className="text-amber-600 font-black text-lg">{prix}</p>
       </div>
     </div>
-  );
-}
-
-function Video(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...props} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-    </svg>
   );
 }

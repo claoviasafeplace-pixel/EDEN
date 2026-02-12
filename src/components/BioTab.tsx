@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { Sparkles, Copy, Check, Instagram, ArrowRight, FileText, Hash, Zap } from 'lucide-react';
+import Input from './ui/Input';
+import Button from './ui/Button';
+import EmptyState from './ui/EmptyState';
 
 type Tone = 'pro' | 'luxe' | 'fun' | 'dynamic';
 type Platform = 'instagram' | 'tiktok' | 'both';
@@ -63,70 +66,59 @@ export default function BioTab() {
     else { setCopiedTk(true); setTimeout(() => setCopiedTk(false), 2000); }
   };
 
-  const inputClass = "w-full px-4 h-11 bg-slate-50 border border-slate-200 focus:border-vm-primary focus:ring-1 focus:ring-vm-primary/20 rounded-lg outline-none text-sm text-slate-700 placeholder:text-slate-400 transition-all";
-
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-vm-text">Bio & Textes</h1>
-        <p className="text-slate-500 mt-1 text-sm">Generez des descriptions optimisees pour Instagram et TikTok.</p>
+        <h1 className="text-[28px] font-bold text-vm-text tracking-tight">Bio & Textes</h1>
+        <p className="text-vm-muted mt-2 text-[15px]">Generez des descriptions optimisees pour Instagram et TikTok.</p>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Left — Form */}
         <div className="space-y-6">
           {/* Property Info */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+          <div className="vm-card p-6 space-y-5">
             <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Informations du bien</span>
+              <span className="text-xs font-medium text-vm-primary">Informations du bien</span>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-slate-500">Ville *</label>
-                <input type="text" value={ville} onChange={e => setVille(e.target.value)} placeholder="Tours" className={inputClass} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-medium text-slate-500">Quartier *</label>
-                <input type="text" value={quartier} onChange={e => setQuartier(e.target.value)} placeholder="Beaujardin" className={inputClass} />
-              </div>
+              <Input label="Ville" required value={ville} onChange={e => setVille(e.target.value)} placeholder="Tours" />
+              <Input label="Quartier" required value={quartier} onChange={e => setQuartier(e.target.value)} placeholder="Beaujardin" />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-500">Prix *</label>
-              <input type="text" value={prix} onChange={e => setPrix(e.target.value)} placeholder="250 000 €" className={inputClass} />
-            </div>
+            <Input label="Prix" required value={prix} onChange={e => setPrix(e.target.value)} placeholder="250 000 €" />
           </div>
 
           {/* Tone selector */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
+          <div className="vm-card p-6 space-y-4">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Ton du texte</span>
+              <span className="text-xs font-medium text-vm-primary">Ton du texte</span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {tones.map(t => (
                 <button
                   key={t.id}
                   onClick={() => { setTone(t.id); setGenerated(false); }}
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-4 rounded-xl border-2 text-left transition-colors cursor-pointer ${
                     tone === t.id
                       ? 'border-vm-primary bg-vm-primary-light'
-                      : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                      : 'border-vm-border-light hover:border-vm-border hover:shadow-sm'
                   }`}
                 >
                   <span className="text-lg">{t.emoji}</span>
-                  <p className={`text-sm font-medium mt-1.5 ${tone === t.id ? 'text-vm-primary' : 'text-vm-text'}`}>{t.label}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{t.desc}</p>
+                  <p className={`text-sm font-semibold mt-1.5 ${tone === t.id ? 'text-vm-primary' : 'text-vm-text'}`}>{t.label}</p>
+                  <p className="text-[11px] text-vm-muted mt-0.5">{t.desc}</p>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Platform */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-4">
+          <div className="vm-card p-6 space-y-4">
             <div className="flex items-center gap-2">
               <Hash className="w-4 h-4 text-vm-primary" />
-              <span className="text-xs font-semibold uppercase tracking-wide text-vm-primary">Plateforme</span>
+              <span className="text-xs font-medium text-vm-primary">Plateforme</span>
             </div>
             <div className="flex gap-2">
               {[
@@ -137,10 +129,10 @@ export default function BioTab() {
                 <button
                   key={p.id}
                   onClick={() => setPlatform(p.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-medium transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 h-11 rounded-xl text-sm font-semibold transition-colors cursor-pointer ${
                     platform === p.id
-                      ? 'bg-vm-text text-white'
-                      : 'bg-slate-50 text-slate-400 hover:text-vm-text hover:bg-slate-100'
+                      ? 'bg-vm-primary/10 text-vm-primary'
+                      : 'bg-vm-bg text-vm-muted hover:text-vm-text hover:bg-vm-border-light'
                   }`}
                 >
                   <p.icon className="w-4 h-4" />
@@ -151,55 +143,41 @@ export default function BioTab() {
           </div>
 
           {/* Generate */}
-          <button
-            onClick={handleGenerate}
-            disabled={!isValid}
-            className="w-full bg-vm-primary text-white h-11 rounded-lg font-medium text-sm
-                       hover:bg-vm-primary-dark transition-colors
-                       flex items-center justify-center gap-2
-                       disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <Sparkles className="w-4 h-4" /> Generer les textes
-          </button>
+          <Button fullWidth disabled={!isValid} icon={<Sparkles className="w-4 h-4" />} onClick={handleGenerate}>
+            Generer les textes
+          </Button>
         </div>
 
         {/* Right — Results */}
         <div className="space-y-6">
           {!generated ? (
-            <div className="bg-white border border-slate-200 rounded-xl h-full min-h-[380px] flex flex-col items-center justify-center text-center p-10">
-              <div className="w-16 h-16 bg-vm-primary-light rounded-2xl flex items-center justify-center relative">
-                <FileText className="w-7 h-7 text-vm-primary" />
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-vm-primary rounded-full flex items-center justify-center">
-                  <Sparkles className="w-3 h-3 text-white" />
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold text-vm-text mt-5">Vos textes apparaitront ici</h3>
-              <p className="text-slate-400 mt-2 text-sm max-w-sm">
-                Remplissez les informations et cliquez sur generer pour obtenir des descriptions optimisees.
-              </p>
-            </div>
+            <EmptyState
+              icon={<FileText className="w-7 h-7 text-vm-primary" />}
+              title="Vos textes apparaitront ici"
+              description="Remplissez les informations et cliquez sur generer pour obtenir des descriptions optimisees."
+            />
           ) : (
-            <div className="space-y-5 animate-fade-in">
+            <div className="space-y-5 animate-tab-enter">
               {(platform === 'instagram' || platform === 'both') && (
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <div className="vm-card overflow-hidden">
+                  <div className="px-5 py-4 border-b border-vm-border-light flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <div className="w-7 h-7 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-lg flex items-center justify-center">
                         <Instagram className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-sm font-medium text-vm-text">Instagram</span>
-                      <span className="text-[10px] text-slate-400">{getBio('instagram').length} / 2200</span>
+                      <span className="text-sm font-semibold text-vm-text">Instagram</span>
+                      <span className="text-[10px] text-vm-muted">{getBio('instagram').length} / 2200</span>
                     </div>
                     <button
                       onClick={() => handleCopy(getBio('instagram'), 'ig')}
-                      className="flex items-center gap-1.5 text-xs font-medium text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light"
+                      className="flex items-center gap-1.5 text-xs font-semibold text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light cursor-pointer"
                     >
                       {copiedIg ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       {copiedIg ? 'Copie !' : 'Copier'}
                     </button>
                   </div>
                   <div className="p-5">
-                    <pre className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed font-sans">
+                    <pre className="whitespace-pre-wrap text-sm text-vm-text leading-relaxed font-sans">
                       {getBio('instagram')}
                     </pre>
                   </div>
@@ -207,25 +185,25 @@ export default function BioTab() {
               )}
 
               {(platform === 'tiktok' || platform === 'both') && (
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <div className="vm-card overflow-hidden">
+                  <div className="px-5 py-4 border-b border-vm-border-light flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <div className="w-7 h-7 bg-vm-text rounded-lg flex items-center justify-center">
                         <Zap className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-sm font-medium text-vm-text">TikTok</span>
-                      <span className="text-[10px] text-slate-400">{getBio('tiktok').length} / 2200</span>
+                      <span className="text-sm font-semibold text-vm-text">TikTok</span>
+                      <span className="text-[10px] text-vm-muted">{getBio('tiktok').length} / 2200</span>
                     </div>
                     <button
                       onClick={() => handleCopy(getBio('tiktok'), 'tk')}
-                      className="flex items-center gap-1.5 text-xs font-medium text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light"
+                      className="flex items-center gap-1.5 text-xs font-semibold text-vm-primary hover:text-vm-primary-dark transition-colors px-2.5 py-1.5 rounded-lg hover:bg-vm-primary-light cursor-pointer"
                     >
                       {copiedTk ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       {copiedTk ? 'Copie !' : 'Copier'}
                     </button>
                   </div>
                   <div className="p-5">
-                    <pre className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed font-sans">
+                    <pre className="whitespace-pre-wrap text-sm text-vm-text leading-relaxed font-sans">
                       {getBio('tiktok')}
                     </pre>
                   </div>
@@ -233,13 +211,13 @@ export default function BioTab() {
               )}
 
               {/* Tip card */}
-              <div className="bg-slate-50 border border-slate-100 p-5 rounded-xl flex gap-4 items-center">
-                <div className="w-10 h-10 bg-vm-primary rounded-lg flex items-center justify-center shrink-0">
-                  <ArrowRight className="w-5 h-5 text-white" />
+              <div className="vm-card p-5 flex gap-4 items-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-vm-primary/20 to-vm-primary/5 rounded-xl flex items-center justify-center shrink-0">
+                  <ArrowRight className="w-5 h-5 text-vm-primary" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-vm-text">Publication rapide</p>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-vm-muted mt-0.5">
                     Copiez le texte et publiez directement sur vos reseaux.
                   </p>
                 </div>
